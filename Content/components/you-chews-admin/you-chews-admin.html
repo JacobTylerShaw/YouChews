@@ -1,0 +1,32 @@
+﻿<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../paper-input/paper-input.html" />
+<link rel="import" href="../paper-button/paper-button.html" />
+<link rel="import" href="../paper-card/paper-card.html" />
+<link rel="import" href="../polymerfire/firebase-app.html" />
+<link rel="import" href="../polymerfire/firebase-document.html" />
+<dom-module id="you-chews-admin">
+    <template>
+        <paper-card style="justify-content:center">
+            <paper-input value="{{genre}}" label="Genre"></paper-input>
+            <paper-input value="{{title}}" label="Title"></paper-input>
+            <paper-button on-click="addFoodTypes">Click</paper-button>
+        </paper-card>
+       
+        <firebase-app auth-domain="youchews-2fdb0.firebaseapp.com"
+                      database-url="https://youchews-2fdb0.firebaseio.com/"
+                      api-key="AIzaSyBJYwknXzvZA3JuMv2Of0fPoNsNN9h-HMY">
+        </firebase-app>
+        <firebase-document path="/foods"
+                           data="{{foods}}">
+        </firebase-document>
+    </template>
+    <script>
+        Polymer({
+            is: "you-chews-admin",
+            addFoodTypes: function () {
+                this.push("foods.foodtypes", { "genre": this.genre, "title": this.title })
+                console.log(this.foods)
+            }
+        })
+    </script>
+</dom-module>

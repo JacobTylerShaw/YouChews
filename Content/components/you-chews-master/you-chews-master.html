@@ -5,7 +5,7 @@
 <link rel="import" href="../iron-icon/iron-icon.html" />
 <link rel="import" href="../paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
-<link rel="import" href="../polymerfire/firebase-document.html" />
+<link rel="import" href="../polymerfire/firebase-query.html" />
 
 <dom-module id="you-chews-master">
     <template>
@@ -21,14 +21,13 @@
                 :host { --app-grid-columns: 1; }
             }
         </style>
-
-        <firebase-document path="/Food/places"
+        <firebase-query path="/Food/places"
                            data="{{foo}}">
-        </firebase-document>
+        </firebase-query>
         <div class="app-grid">
             <paper-card heading="Food">
                 <div class="card-content">
-
+                    
                 </div>
             </paper-card>
             <paper-card heading="">
@@ -43,7 +42,6 @@
         Polymer({
             is: "you-chews-master",
             properties: {
-                foods: { type: Object, notify: true },
                 index:{ type: Array, notify:true }
             },
             ready: function () {

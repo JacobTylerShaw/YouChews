@@ -10,6 +10,20 @@
     <link rel="import" href="Content/components/you-chews-master/you-chews-master.html" />
 </head>
 <body class="body">
+
+
+    <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
+    <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBJYwknXzvZA3JuMv2Of0fPoNsNN9h-HMY",
+    authDomain: "youchews-2fdb0.firebaseapp.com",
+    databaseURL: "https://youchews-2fdb0.firebaseio.com",
+    storageBucket: "youchews-2fdb0.appspot.com",
+    messagingSenderId: "976906841531"
+  };
+  firebase.initializeApp(config);
+    </script>
     <div class="container">
         <you-chews-master></you-chews-master>
     </div>

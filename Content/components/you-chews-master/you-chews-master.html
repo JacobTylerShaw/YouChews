@@ -5,6 +5,7 @@
 <link rel="import" href="../iron-icon/iron-icon.html" />
 <link rel="import" href="../paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../polymerfire/firebase-document.html" />
 
 <dom-module id="you-chews-master">
     <template>
@@ -20,41 +21,38 @@
                 :host { --app-grid-columns: 1; }
             }
         </style>
-        <div class="app-grid">
-            <paper-card heading="{{foodtype.Title}}">
-                <div class="card-content">
 
-                </div>
-            </paper-card>
-            <paper-card heading="Food">
-                <div class="card-content">
-
-                </div>
-            </paper-card>
-        </div>
+        <firebase-document path="/Food/places"
+                           data="{{foo}}">
+        </firebase-document>
         <div class="app-grid">
             <paper-card heading="Food">
                 <div class="card-content">
 
                 </div>
             </paper-card>
-            <paper-card heading="Food">
+            <paper-card heading="">
                 <div class="card-content">
 
                 </div>
             </paper-card>
         </div>
-        <paper-button style="background-color:#f7ffaf; color:black" on-click="randomizeFood">Click</paper-button>
+      <paper-button style="background-color:#f7ffaf; color:black" on-click="randomizeFood">Click</paper-button>
     </template>
     <script>
         Polymer({
             is: "you-chews-master",
             properties: {
-                foodtypes: { type: Object, notify: true }
+                foods: { type: Object, notify: true },
+                index:{ type: Array, notify:true }
+            },
+            ready: function () {
+                console.log(this.foo)
             },
             randomizeFood: function () {
 
             }
+           
         })
     </script>
 </dom-module>

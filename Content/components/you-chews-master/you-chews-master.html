@@ -18,7 +18,7 @@
                            data="{{foodplaces}}">
         </firebase-document>
         <div class="app-grid">
-            <paper-card heading="{{food}}">
+            <paper-card heading="{{food.places}}">
                 <div class="card-content">
                     <div></div>
                 </div>
@@ -32,18 +32,16 @@
             is: "you-chews-master",
             properties: {
                 foodplaces: { type: Array, notify: true, observer: "limitplaces" },
-                food:{ type: Array, notify: true}
+                food:{ type: Object, notify: true}
             },
             limitplaces: function (foodplaces) {
                 this.set("foodplaces", foodplaces)
-                for (var i = 0; i < foodplaces.length; i++) {
-                    this.set("food", Math.floor(Math.random() * foodplaces.length))
-                }
+                var randomPlace = Math.floor(Math.random() * foodplaces.length)
+                this.set("food", foodplaces[randomPlace]);
             },
             randomizeFood: function () {
-                for (var i = 0; i < this.foodplaces.length; i++) {
-                    this.set("food", Math.floor(Math.random() * this.foodplaces.length));
-                }
+                var randomPlace = Math.floor(Math.random() * this.foodplaces.length)
+                this.set("food", this.foodplaces[randomPlace]);
             }
            
         })

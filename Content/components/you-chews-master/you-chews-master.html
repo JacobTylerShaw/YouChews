@@ -5,50 +5,45 @@
 <link rel="import" href="../iron-icon/iron-icon.html" />
 <link rel="import" href="../paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
-<link rel="import" href="../polymerfire/firebase-query.html" />
+<link rel="import" href="../polymerfire/firebase-document.html" />
 
 <dom-module id="you-chews-master">
     <template>
         <style include="app-grid-style">
-            :host { --app-grid-columns: 2; --app-grid-item-height: 200px; --app-grid-gutter: 16px; }
-            paper-button { width: 100%; padding: 16px;}
-
-            .item { background-color: white; }
-
-            .cardheader{--paper-card-header-text: center}
-
-            @media (max-width: 640px) {
-                :host { --app-grid-columns: 1; }
-            }
+            :host { --app-grid-columns: 1; --app-grid-item-height: 20%; --app-grid-gutter: 16px; }
+            paper-button { width: 100%;}
+          
         </style>
-        <firebase-query path="/Food/places"
-                           data="{{foo}}">
-        </firebase-query>
+        <firebase-document path="/Food/places"
+                           data="{{foodplaces}}">
+        </firebase-document>
         <div class="app-grid">
-            <paper-card heading="Food">
+            <paper-card heading="{{food}}">
                 <div class="card-content">
-                    
+                    <div></div>
                 </div>
             </paper-card>
-            <paper-card heading="">
-                <div class="card-content">
 
-                </div>
-            </paper-card>
+            <paper-button style="background-color:#f7ffaf; color:black" on-click="randomizeFood">Click</paper-button>
         </div>
-      <paper-button style="background-color:#f7ffaf; color:black" on-click="randomizeFood">Click</paper-button>
     </template>
     <script>
         Polymer({
             is: "you-chews-master",
             properties: {
-                index:{ type: Array, notify:true }
+                foodplaces: { type: Array, notify: true, observer: "limitplaces" },
+                food:{ type: Array, notify: true}
             },
-            ready: function () {
-                console.log(this.foo)
+            limitplaces: function (foodplaces) {
+                this.set("foodplaces", foodplaces)
+                for (var i = 0; i < foodplaces.length; i++) {
+                    this.set("food", Math.floor(Math.random() * foodplaces.length))
+                }
             },
             randomizeFood: function () {
-
+                for (var i = 0; i < this.foodplaces.length; i++) {
+                    this.set("food", Math.floor(Math.random() * this.foodplaces.length));
+                }
             }
            
         })

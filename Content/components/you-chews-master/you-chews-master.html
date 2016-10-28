@@ -10,13 +10,8 @@
 <dom-module id="you-chews-master">
     <template>
         <style include="app-grid-style">
-            :host { --app-grid-columns: 2; --app-grid-item-height: 200px; --app-grid-gutter: 16px; }
-            paper-button { width: 100%; padding: 16px;}
-
-            .item { background-color: white; }
-
-            .cardheader{--paper-card-header-text: center}
-
+            :host { --app-grid-columns: 1; --app-grid-item-height: 20%; --app-grid-gutter: 16px; }
+            paper-button { width: 100%; padding: 16px; margin:auto;}
             @media (max-width: 640px) {
                 :host { --app-grid-columns: 1; }
             }
@@ -24,22 +19,15 @@
         <firebase-document path="/Food/places"
                            data="{{foodplaces}}">
         </firebase-document>
-            <div class="app-grid">
-                <paper-card heading="{{food}}">
-                    <div class="card-content">
-                        <div></div>
-                    </div>
-                </paper-card>
-            </div>
-                <div class="app-grid">
-                    <paper-card heading="{{food}}">
-                        <div class="card-content">
-                            <div></div>
-                        </div>
-                    </paper-card>
+        <div class="app-grid">
+            <paper-card heading="{{food}}">
+                <div class="card-content">
+                    <div></div>
                 </div>
-     
-      <paper-button style="background-color:#f7ffaf; color:black" on-click="randomizeFood">Click</paper-button>
+            </paper-card>
+
+            <paper-button style="background-color:#f7ffaf; color:black" on-click="randomizeFood">Click</paper-button>
+        </div>
     </template>
     <script>
         Polymer({
@@ -56,7 +44,7 @@
             },
             randomizeFood: function () {
                 for (var i = 0; i < this.foodplaces.length; i++) {
-                    this.set("food", Math.floor(Math.random() * this.foodplaces.length))
+                    this.set("food", Math.floor(Math.random() * this.foodplaces.length));
                 }
             }
            

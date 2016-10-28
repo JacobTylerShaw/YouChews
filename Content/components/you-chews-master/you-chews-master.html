@@ -11,10 +11,8 @@
     <template>
         <style include="app-grid-style">
             :host { --app-grid-columns: 1; --app-grid-item-height: 20%; --app-grid-gutter: 16px; }
-            paper-button { width: 100%; padding: 16px; margin:auto;}
-            @media (max-width: 640px) {
-                :host { --app-grid-columns: 1; }
-            }
+            paper-button { width: 100%;}
+          
         </style>
         <firebase-document path="/Food/places"
                            data="{{foodplaces}}">

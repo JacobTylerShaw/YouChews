@@ -3,27 +3,60 @@
 <link rel="import" href="../paper-button/paper-button.html" />
 <link rel="import" href="../paper-card/paper-card.html" />
 <link rel="import" href="../iron-icon/iron-icon.html" />
+<link rel="import" href="../iron-pages/iron-pages.html" />
 <link rel="import" href="../paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
 <link rel="import" href="../polymerfire/firebase-document.html" />
-
+<link rel="import" href="../paper-input/paper-input.html" />
+<link rel="import" href="../google-map/google-map-elements.html" />
+<link rel="import" href="../google-apis/google-maps-api.html" />
+\<link rel="import" href="../geo-location/geo-location.html">
 <dom-module id="you-chews-master">
     <template>
         <style include="app-grid-style">
             :host { --app-grid-columns: 1; --app-grid-item-height: 20%; --app-grid-gutter: 16px; }
-            paper-button { width: 100%;}
-          
+            paper-button { width: 100%; }
+            paper-card{width:100%}
+            google-map { height: 320px; }
         </style>
         <firebase-document path="/Food/places"
                            data="{{foodplaces}}">
         </firebase-document>
         <div class="app-grid">
-            <paper-card heading="{{food.places}}">
-                <div class="card-content">
-                    <div></div>
+            <iron-pages id="pages" selected="0">
+                <div>
+                    <paper-card id="foodCard" style="height:320px">
+                        <div on-tap="findFood" class="card-content">
+                            <div style="margin:auto">
+                                <h1 style="color:black">{{food.places}}</h1>
+                            </div>
+                        </div>
+                    </paper-card>
                 </div>
-            </paper-card>
-
+                <div>
+                    <paper-card id="mapResults">
+                        <div class="card-content">
+                            <paper-input label="search" value="{{food.places}}"></paper-input>
+                            <google-map-search map="[[map]]" query="{{query}}" results="{{results}}"></google-map-search>
+                        </div>
+                        <geo-location latitude="{{latitude}}"
+                                      longitude="{{longitude}}">
+                        </geo-location>
+                        <google-map map="{{map}}"
+                                    latitude="{{latitude}}"
+                                    longitude="{{longitude}}"
+                                    api-key="AIzaSyCjnrnP78cuSN2maaDqXLOBY_i8LcKZx8c">
+                            <template is="dom-repeat" items="{{results}}" as="marker">
+                                <google-map-marker latitude="{{latitude}}"
+                                                   longitude="{{longitude}}">
+                                    <h2>{{marker.name}}</h2>
+                                    <span>{{marker.formatted_address}}</span>
+                                </google-map-marker>
+                            </template>
+                        </google-map>
+                    </paper-card>
+                </div>
+            </iron-pages>
             <paper-button style="background-color:#f7ffaf; color:black" on-click="randomizeFood">Click</paper-button>
         </div>
     </template>
@@ -32,7 +65,10 @@
             is: "you-chews-master",
             properties: {
                 foodplaces: { type: Array, notify: true, observer: "limitplaces" },
-                food:{ type: Object, notify: true}
+                food: { type: Object, notify: true },
+                query: { type: String, notify: true },
+                results: { type: Object, notify: true },
+                marker: { type: Object, notify: true },
             },
             limitplaces: function (foodplaces) {
                 this.set("foodplaces", foodplaces)
@@ -42,8 +78,13 @@
             randomizeFood: function () {
                 var randomPlace = Math.floor(Math.random() * this.foodplaces.length)
                 this.set("food", this.foodplaces[randomPlace]);
-            }
-           
+            },
+            findFood: function () {
+                this.$.pages.selectNext();
+                console.log(this.longitude);
+                console.log(this.latitude);
+            },
+
         })
     </script>
 </dom-module>

@@ -32,25 +32,26 @@
                             </div>
                         </div>
                     </paper-card>
-                </div>
-                <div>
+                </div>                <div>
                     <paper-card id="mapResults">
                         <div class="card-content">
                             <paper-input label="search" value="{{food.places}}"></paper-input>
-                            <google-map-search map="[[map]]" query="{{query}}" results="{{results}}"></google-map-search>
+                            <google-map-search map="[[map]]" query="{{food.places}}" results="{{results}}"></google-map-search>
                         </div>
-                        <geo-location latitude="{{latitude}}"
-                                      longitude="{{longitude}}">
+                        <geo-location 
+                                    latitude="{{latitude}}"
+                                    longitude="{{longitude}}">
                         </geo-location>
                         <google-map map="{{map}}"
                                     latitude="{{latitude}}"
                                     longitude="{{longitude}}"
                                     api-key="AIzaSyCjnrnP78cuSN2maaDqXLOBY_i8LcKZx8c">
                             <template is="dom-repeat" items="{{results}}" as="marker">
-                                <google-map-marker latitude="{{latitude}}"
-                                                   longitude="{{longitude}}">
-                                    <h2>{{marker.name}}</h2>
-                                    <span>{{marker.formatted_address}}</span>
+                                <google-map-marker
+                                    latitude="{{marker.latitude}}"
+                                    longitude="{{marker.longitude}}">
+                                    <h2 style="color:black">{{marker.name}}</h2>
+                                    <span style="color:black">{{marker.formatted_address}}</span>
                                 </google-map-marker>
                             </template>
                         </google-map>

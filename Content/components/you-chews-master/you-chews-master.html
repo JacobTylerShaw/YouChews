@@ -1,65 +1,103 @@
 ﻿<link rel="import" href="../polymer/polymer.html" />
-<link rel="import" href="../app-layout/app-grid/app-grid-style.html" />
 <link rel="import" href="../paper-button/paper-button.html" />
-<link rel="import" href="../paper-card/paper-card.html" />
-<link rel="import" href="../iron-icon/iron-icon.html" />
-<link rel="import" href="../iron-pages/iron-pages.html" />
-<link rel="import" href="../paper-icon-button/paper-icon-button.html" />
-<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
 <link rel="import" href="../polymerfire/firebase-document.html" />
 <link rel="import" href="../paper-input/paper-input.html" />
+<link rel="import" href="../paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../xenon-layout/xenon-layout.html" />
+<link rel="import" href="../xenon-layout/xenon-section.html" />
+<link rel="import" href="../xenon-layout/xenon-field.html" />
+<link rel="import" href="../xenon-photo-card/xenon-photo-card.html" />
+<link rel="import" href="../iron-icon/iron-icon.html" />
+<link rel="import" href="../iron-pages/iron-pages.html" />
 <link rel="import" href="../google-map/google-map-elements.html" />
 <link rel="import" href="../google-apis/google-maps-api.html" />
-\<link rel="import" href="../geo-location/geo-location.html">
+<link rel="import" href="../geo-location/geo-location.html">
 <dom-module id="you-chews-master">
     <template>
-        <style include="app-grid-style">
-            :host { --app-grid-columns: 1; --app-grid-item-height: 20%; --app-grid-gutter: 16px; }
-            paper-button { width: 100%; }
-            paper-card{width:100%}
-            google-map { height: 320px; }
+
+        <style is="custom-style">
+            google-map {
+                height: 400px;
+                width: 1000px;
+            }
+
+            .cafe-header {
+                @apply(--paper-font-headline);
+            }
+
+            .cafe-light {
+                color: var(--paper-grey-600);
+            }
+
+            .cafe-location {
+                float: right;
+                font-size: 15px;
+                vertical-align: middle;
+            }
+
+            .cafe-reserve {
+                color: var(--google-blue-500);
+            }
+
+            iron-icon.star {
+                --iron-icon-width: 16px;
+                --iron-icon-height: 16px;
+                color: var(--paper-amber-500);
+            }
+
+                iron-icon.star:last-of-type {
+                    color: var(--paper-grey-500);
+                }
         </style>
         <firebase-document path="/Food/places"
                            data="{{foodplaces}}">
         </firebase-document>
-        <div class="app-grid">
-            <iron-pages id="pages" selected="0">
-                <div>
-                    <paper-card id="foodCard" style="height:320px">
-                        <div on-tap="findFood" class="card-content">
-                            <div style="margin:auto">
-                                <h1 style="color:black">{{food.places}}</h1>
-                            </div>
+        <geo-location latitude="{{latitude}}" longitude="{{longitude}}"></geo-location>
+        <xenon-section>
+            <xenon-photo-card>
+                <main>
+                    <div style="display:flex">
+                        <div style="flex:0 1 auto">
+                            {{food.places}}
                         </div>
-                    </paper-card>
-                </div>                <div>
-                    <paper-card id="mapResults">
-                        <div class="card-content">
-                            <paper-input label="search" value="{{food.places}}"></paper-input>
-                            <google-map-search map="[[map]]" query="{{food.places}}" results="{{results}}"></google-map-search>
+                    </div>
+                    <google-map-search map="[[map]]" query="{{food.places}}" results="{{results}}"></google-map-search>
+                    <google-map map="{{map}}"
+                                latitude="{{latitude}}"
+                                longitude="{{longitude}}"
+                                api-key="AIzaSyCjnrnP78cuSN2maaDqXLOBY_i8LcKZx8c">
+                        <div style="margin:auto">
+                            <h3 style="color:black">{{food.places}}</h3>
                         </div>
-                        <geo-location 
-                                    latitude="{{latitude}}"
-                                    longitude="{{longitude}}">
-                        </geo-location>
-                        <google-map map="{{map}}"
-                                    latitude="{{latitude}}"
-                                    longitude="{{longitude}}"
-                                    api-key="AIzaSyCjnrnP78cuSN2maaDqXLOBY_i8LcKZx8c">
-                            <template is="dom-repeat" items="{{results}}" as="marker">
-                                <google-map-marker
-                                    latitude="{{marker.latitude}}"
-                                    longitude="{{marker.longitude}}">
-                                    <h2 style="color:black">{{marker.name}}</h2>
-                                    <span style="color:black">{{marker.formatted_address}}</span>
-                                </google-map-marker>
-                            </template>
-                        </google-map>
-                    </paper-card>
-                </div>
-            </iron-pages>
-            <paper-button style="background-color:#f7ffaf; color:black" on-click="randomizeFood">Click</paper-button>
-        </div>
+                        <template is="dom-repeat" items="{{results}}" as="marker">
+
+                         
+                            <google-map-marker draggable="true" latitude="{{marker.latitude}}"
+                                               longitude="{{marker.longitude}}">
+                                <div class="card-content">
+                                    <div class="cafe-header">
+                                        {{marker.name}}
+                                        <div class="cafe-location cafe-light">
+                                            <iron-icon icon="communication:location-on"></iron-icon>
+                                        </div>
+                                    </div>
+                                    <p>$ {{marker.price_level}}<span style="font-weight:bold">・</span>{{marker.rating}} stars<span style="font-weight:bold">・</span>{{food.places}}</p>
+                                    <p>{{isOpen(marker.opening_hours.open_now)}}</p>
+                                </div>
+                                <div class="card-actions">
+                                    <paper-button on-click="randomizeFood" class="cafe-reserve">Let's Go!</paper-button>
+                                    <a href="{{marker.formatted_address}}">{{marker.formatted_address}}</a>
+                                </div>
+                            </google-map-marker>
+                        </template>
+                    </google-map>
+                </main>
+                <buttons>
+                    <spacer></spacer>
+                    <paper-button style="background-color:#f7ffaf; color:black; width: 100%;" on-click="randomizeFood">Randomize</paper-button>
+                </buttons>
+            </xenon-photo-card>
+        </xenon-section>
     </template>
     <script>
         Polymer({
@@ -68,9 +106,9 @@
                 foodplaces: { type: Array, notify: true, observer: "limitplaces" },
                 food: { type: Object, notify: true },
                 query: { type: String, notify: true },
-                results: { type: Object, notify: true },
-                marker: { type: Object, notify: true },
+                results: { type: Object, notify: true, observer: "getInfo" },
             },
+
             limitplaces: function (foodplaces) {
                 this.set("foodplaces", foodplaces)
                 var randomPlace = Math.floor(Math.random() * foodplaces.length)
@@ -81,10 +119,23 @@
                 this.set("food", this.foodplaces[randomPlace]);
             },
             findFood: function () {
-                this.$.pages.selectNext();
-                console.log(this.longitude);
-                console.log(this.latitude);
+                this.$.pages.selected = 1;
+
             },
+            getInfo: function (results) {
+                console.log(results)
+            },
+            isOpen: function (open) {
+                if (open) {
+                    return "Open Now!"
+                } else {
+                    return "Closed, Sorry."
+                }
+            },
+            mapit: function (e) {
+                //window.location.href = '...';
+                console.log("arsgdfasdfgdsfg",e);
+            }
 
         })
     </script>
